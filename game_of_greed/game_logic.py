@@ -1,5 +1,5 @@
 import abc
-
+from random import randint
 
 # from abc import ABC 
 class GameLogic:
@@ -23,8 +23,11 @@ class GameLogic:
         return score
 
     @staticmethod 
-    def roll_dice(num:int)->tuple:
-        pass
+    def roll_dice(num=6)->tuple:
+        list_dice=[]
+        for i in range(num):
+            list_dice.append(randint(1,6))
+        return tuple(list_dice)
 
-x=GameLogic
-print(x.calculate_score((1,5)))
+        
+
