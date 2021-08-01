@@ -7,13 +7,13 @@ class Banker():
 
     def shelf(self,amount_of_points:int):
         self.shelved=amount_of_points
-        pass
+        
 
     def bank(self):
         self.balance+=self.shelved
         self.shelved=0
-        pass
+        
 
     def clear_shelf(self):
         self.shelved=0
-        pass
+        
