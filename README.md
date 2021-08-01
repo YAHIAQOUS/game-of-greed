@@ -17,3 +17,4 @@ The game of Greed is a dice game between two players. ... When a player passes (
 
 ## pull request
 
+https://github.com/YAHIAQOUS/game-of-greed/pull/9
