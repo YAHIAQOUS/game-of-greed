@@ -14,7 +14,10 @@ class GameLogic:
         for item in input: 
             current_count = choosen_map.get(item, 0)
             choosen_map[item] = current_count + 1
-       
+        if len(choosen_map)==6:
+                return 1500
+        if  len(choosen_map)==3 and list(choosen_map.values())[0]==list(choosen_map.values())[1]==list(choosen_map.values())[2]:
+            return 1500
         for item in choosen_map:
             target_element=f"{choosen_map[item]}{item}"
             if target_element in calculate_table:
