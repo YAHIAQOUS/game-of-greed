@@ -6,7 +6,6 @@ class GameLogic:
 
     @staticmethod
     def calculate_score(x:tuple)-> int:
-
         pass
 
     @staticmethod 
@@ -15,6 +14,6 @@ class GameLogic:
         for i in range(num):
             list_dice.append(randint(1,6))
         return tuple(list_dice)
-        
+
         
 
