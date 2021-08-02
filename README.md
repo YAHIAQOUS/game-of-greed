@@ -1,20 +1,19 @@
-
 # Game Of Greed version 1
 
-## Group4 
+## Group4
 
-* omar dyab
+- Omar Dyab
 
-* ali rahhal
+- Ali Rahhal
 
-* yahia alqous
+- Yahia Alqous
 
-* nura tabanjeh
+- Nura Tabanjeh
 
-## overView
+## OverView
 
 The game of Greed is a dice game between two players. ... When a player passes (that is, rolls zero dice on their turn) the other player gets one more turn to roll, and then the game is over. If at that point neither player has gone over 100, the player with the higher score wins.
 
-## pull request
+## Pull Request
 
-https://github.com/YAHIAQOUS/game-of-greed/pull/9
+<https://github.com/YAHIAQOUS/game-of-greed/pull/9>
