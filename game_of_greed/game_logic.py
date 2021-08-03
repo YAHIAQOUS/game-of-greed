@@ -33,6 +33,7 @@ class GameLogic:
             list_dice.append(randint(1,6))
         return tuple(list_dice)
 
+
     @staticmethod
     def get_scorers(input:tuple)-> tuple:
         #"first diget num of repeatition second digt number it self " : value
@@ -59,6 +60,27 @@ class GameLogic:
         
         return tuple(sorted(score))
 
+
+    @staticmethod 
+    def validate_keepers(roll, keepers):
+        # Transform roll into list in order to use pop() method
+        if type(roll) != tuple:
+            roll = [roll]
+        else:
+            roll = list(roll)
+        # Transform keepers into tuple if  it is not
+        if type(keepers) != tuple:
+            keepers = (keepers)
+
+        for i in keepers:
+            if i in roll:
+                roll.pop(roll.index(i))
+            else:
+                print('Cheater!!! Or possibly made a typo...')
+                return False
+        return True
+
 if __name__=="__main__":
     game_logic=GameLogic()
-    print(game_logic.get_scorers((1,2,3,1,2,3)))
+    print (game_logic.validate_keepers((1,5),(1,5)))
+
