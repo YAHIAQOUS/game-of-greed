@@ -26,7 +26,6 @@ class Game:
                     roundScore=0
                     print(f'Starting round {round}')
                     
-                    
                     user_choose='r'
                     while user_choose=='r':
                         rollDice= " ".join(str(item)for item in(self.roller(remainning_dice)))
@@ -47,14 +46,22 @@ class Game:
                                 roundScore += GameLogic.calculate_score(dice_input)
                                 banker.shelf(roundScore)
                                 print(f'You have {banker.shelved} unbanked points and {remainning_dice} dice remaining')
+        
                                 user_choose = input("(r)oll again, (b)ank your points or (q)uit:\n> ")
-                                
                                 if user_choose=="b":
                                     self.banker_bank(banker,roundScore,round)
                                     break
                                 elif user_choose == "q":
                                     self.quit(loop, banker)
+
+                                elif user_choose=='r' and len(dice_input) ==6 and len(dice_input)==len(GameLogic.get_scorers(self.roller(remainning_dice))):
+                                    
+                                    remainning_dice = 6
+                                    
+
+                                    continue   
                     round+=1
+
                         
                                 
     def zlich (rollDice,banker,round):
