@@ -32,6 +32,7 @@ class GameLogic:
         for i in range(num):
             list_dice.append(randint(1,6))
         return tuple(list_dice)
+        # return tuple((1,2,3,4,5,6))
 
 
     @staticmethod
