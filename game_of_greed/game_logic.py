@@ -71,17 +71,16 @@ class GameLogic:
             roll = list(roll)
         # Transform keepers into tuple if  it is not
         if type(keepers) != tuple:
-            keepers = (keepers)
+            keepers = (keepers,)
 
         for i in keepers:
             if i in roll:
                 roll.pop(roll.index(i))
             else:
-                print('Cheater!!! Or possibly made a typo...')
                 return False
         return True
 
 if __name__=="__main__":
     game_logic=GameLogic()
-    print (game_logic.validate_keepers((1,5),(1,5)))
+    print (game_logic.validate_keepers((5, 2, 3, 5, 4, 2),(5)))
 
