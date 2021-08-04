@@ -6,7 +6,6 @@ class Game:
     def __init__(self):
         self.roller =None
 
-    
     @classmethod
     def play(self,roller=None):
         self.roller=roller or GameLogic.roll_dice
@@ -14,8 +13,8 @@ class Game:
         banker = Banker()
         round = 1
         loop = True
-
-        user_input=input("(y)es to play or (n)o to decline\n> ")
+        print("(y)es to play or (n)o to decline")
+        user_input=input("> ")
         if user_input == 'n':
             print('OK. Maybe another time')
 
@@ -36,23 +35,30 @@ class Game:
                             self.zlich(rollDice,banker,round)
                             break
                         else:    
-                            dice_input = input('Enter dice to keep, or (q)uit:\n> ')
+                            print("Enter dice to keep, or (q)uit:")
+                            dice_input = input('> ')
                             if dice_input == 'q':
                                 self.quit(banker)
                                 loop = False
                                 break
-                            elif GameLogic.validate_keepers:    
+                            else:
+                                if not GameLogic.validate_keepers(tuple(rollDice),tuple(dice_input)): 
+                                        print("Cheater!!! Or possibly made a typo...")
+                                        print(f"*** {rollDice} ***")
+                                        print("Enter dice to keep, or (q)uit:")
+                                        dice_input = input('> ')
+                               
                                 remainning_dice = remainning_dice - len(dice_input)
                                 roundScore += GameLogic.calculate_score(dice_input)
                                 banker.shelf(roundScore)
                                 print(f'You have {banker.shelved} unbanked points and {remainning_dice} dice remaining')
-        
-                                user_choose = input("(r)oll again, (b)ank your points or (q)uit:\n> ")
+                                print("(r)oll again, (b)ank your points or (q)uit:")
+                                user_choose = input("> ")
                                 if user_choose=="b":
                                     self.banker_bank(banker,roundScore,round)
                                     break
                                 elif user_choose == "q":
-                                    self.quit(loop, banker)
+                                    self.quit(banker)
 
                                 elif user_choose=='r' and len(dice_input) ==6 and len(dice_input)==len(GameLogic.get_scorers(self.roller(remainning_dice))):
                                     
@@ -63,7 +69,7 @@ class Game:
                     round+=1
 
                         
-                                
+                             
     def zlich (rollDice,banker,round):
         print("****************************************\n**        Zilch!!! Round over         **\n****************************************")
         banker.clear_shelf()
@@ -79,7 +85,12 @@ class Game:
 
     def quit ( banker):
          print(f'Thanks for playing. You earned {banker.balance} points')
-        
+         
+    def is_hot_dice(rollDice:tuple)->bool:
+          rolls_has_value=GameLogic.get_scorers(rollDice)
+          if sorted(rollDice)==sorted(rolls_has_value):
+              return True
+          return False
 
 if __name__ == "__main__":
     playGmae = Game
