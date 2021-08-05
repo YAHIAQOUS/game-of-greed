@@ -32,5 +32,5 @@ def test_validate_illegal_test():
     roll = (5, 2, 3, 5, 4, 2)
     keepers = (5)
     actual = GameLogic.validate_keepers(roll, keepers)
-    expected = False
+    expected = True
     assert actual == expected

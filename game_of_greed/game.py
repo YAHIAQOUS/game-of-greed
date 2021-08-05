@@ -1,3 +1,4 @@
+import re
 from game_of_greed.game_logic import GameLogic
 from game_of_greed.banker import Banker
 from abc import ABC
@@ -19,55 +20,61 @@ class Game:
             print('OK. Maybe another time')
 
         elif user_input == 'y':
+            user_choose=""
             while loop and banker.balance <= 10000:
-                while loop:
-                    remainning_dice = 6
-                    roundScore=0
-                    print(f'Starting round {round}')
-                    
-                    user_choose='r'
-                    while user_choose=='r':
-                        rollDice= " ".join(str(item)for item in(self.roller(remainning_dice)))
-                        print(f'Rolling {remainning_dice} dice...')                   
-                        print(f"*** {rollDice} ***")
-                        junk=GameLogic.calculate_score(rollDice)
-                        if junk ==0 or remainning_dice==0:
-                            self.zlich(rollDice,banker,round)
+                remainning_dice = 6
+                roundScore=0
+                print(f'Starting round {round}')
+                
+                user_choose='r'
+                is_hot_dice=False
+                while user_choose=='r':
+                    rollDice= " ".join(str(item)for item in(self.roller(remainning_dice)))
+                    print(f'Rolling {remainning_dice} dice...')                   
+                    print(f"*** {rollDice} ***")
+                    junk=GameLogic.calculate_score(rollDice)
+                    if junk ==0 or remainning_dice==0:
+                        self.zlich(rollDice,banker,round)
+                        break
+                    else:    
+                        print("Enter dice to keep, or (q)uit:")
+                        dice_input = input('> ')
+                        if len(dice_input)==6:
+                            is_hot_dice=self.is_hot_dice(dice_input)
+                        if is_hot_dice:
+                            remainning_dice=6
+                            # print(f'You have {banker.shelved} unbanked points and {remainning_dice} dice remaining')
+                            # print("(r)oll again, (b)ank your points or (q)uit:")
+                        if dice_input == "q":
+                            loop = False
                             break
-                        else:    
-                            print("Enter dice to keep, or (q)uit:")
-                            dice_input = input('> ')
-                            if dice_input == 'q':
-                                self.quit(banker)
-                                loop = False
+                           
+                        else:
+                            if not GameLogic.validate_keepers(tuple(rollDice),tuple(dice_input)): 
+                                    print("Cheater!!! Or possibly made a typo...")
+                                    print(f"*** {rollDice} ***")
+                                    print("Enter dice to keep, or (q)uit:")
+                                    dice_input = input('> ')
+                            dice_input = dice_input.replace(" ","")
+                            remainning_dice = remainning_dice - len(dice_input)   
+                            roundScore += GameLogic.calculate_score(dice_input)
+                            banker.shelf(roundScore)
+                            print(f'You have {banker.shelved} unbanked points and {remainning_dice} dice remaining')
+                            print("(r)oll again, (b)ank your points or (q)uit:")
+                            user_choose = input("> ")
+                            if user_choose=="b":
+                                self.banker_bank(banker,roundScore,round)
                                 break
-                            else:
-                                if not GameLogic.validate_keepers(tuple(rollDice),tuple(dice_input)): 
-                                        print("Cheater!!! Or possibly made a typo...")
-                                        print(f"*** {rollDice} ***")
-                                        print("Enter dice to keep, or (q)uit:")
-                                        dice_input = input('> ')
-                               
-                                remainning_dice = remainning_dice - len(dice_input)
-                                roundScore += GameLogic.calculate_score(dice_input)
-                                banker.shelf(roundScore)
-                                print(f'You have {banker.shelved} unbanked points and {remainning_dice} dice remaining')
-                                print("(r)oll again, (b)ank your points or (q)uit:")
-                                user_choose = input("> ")
-                                if user_choose=="b":
-                                    self.banker_bank(banker,roundScore,round)
-                                    break
-                                elif user_choose == "q":
-                                    self.quit(banker)
+                            elif user_choose == "q":
+                                loop = False
 
-                                elif user_choose=='r' and len(dice_input) ==6 and len(dice_input)==len(GameLogic.get_scorers(self.roller(remainning_dice))):
-                                    
-                                    remainning_dice = 6
-                                    
-
-                                    continue   
-                    round+=1
-
+                            elif user_choose=='r':
+                                if is_hot_dice:
+                                    remainning_dice=6                               
+                                continue   
+                round+=1
+            if user_choose!="q" or dice_input!="q":
+                self.quit(banker)
                         
                              
     def zlich (rollDice,banker,round):
@@ -88,7 +95,7 @@ class Game:
          
     def is_hot_dice(rollDice:tuple)->bool:
           rolls_has_value=GameLogic.get_scorers(rollDice)
-          if sorted(rollDice)==sorted(rolls_has_value):
+          if sorted(rollDice)==sorted(rolls_has_value)and len(rollDice)==6:
               return True
           return False
 
